@@ -29,7 +29,6 @@ This is a C program that converts an image into ASCII and unicode art using ANSI
 
 To compile the program, run the following command:
 ```bash
-cd src
 gcc -o termview src/main.c -lm
 ```
 This will create an executable file called `image_to_ascii`.
