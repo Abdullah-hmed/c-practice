@@ -1,8 +1,4 @@
 
-
-**Image to ASCII Art Converter**
-=====================================
-
 **Table of Contents**
 -----------------
 

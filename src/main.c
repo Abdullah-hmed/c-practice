@@ -100,21 +100,25 @@ int directory_exists(const char *path) {
     return (stat(path, &buffer) == 0 && S_ISDIR(buffer.st_mode));
 }
 
-void high_res_color_pixel(unsigned int r_top, unsigned int g_top, unsigned int b_top, unsigned int r_bottom, unsigned int g_bottom, unsigned int b_bottom) {
-    printf("\033[38;2;%d;%d;%dm\033[48;2;%d;%d;%dm▀\033[0m", r_top, g_top, b_top, r_bottom, g_bottom, b_bottom);
+char* high_res_color_pixel(unsigned int r_top, unsigned int g_top, unsigned int b_top, unsigned int r_bottom, unsigned int g_bottom, unsigned int b_bottom) {
+    static char buffer[50];
+    snprintf(buffer, sizeof(buffer), "\033[38;2;%d;%d;%dm\033[48;2;%d;%d;%dm▀\033[0m", r_top, g_top, b_top, r_bottom, g_bottom, b_bottom);
+    return buffer;
 }
 
-void color_pixel(unsigned int r, unsigned int g, unsigned int b) {
-    printf("\x1b[38;2;%d;%d;%dm█\033[0m", r, g, b);
+char* color_pixel(unsigned int r, unsigned int g, unsigned int b) {
+    static char buffer[30];
+    snprintf(buffer, sizeof(buffer), "\x1b[38;2;%d;%d;%dm█\033[0m", r, g, b);
+    return buffer;
 }
 
 char map_pixel(int pixel_value) {
     const char ascii_chars[] = " .:-=+*#%@";
     int index = pixel_value / 32 % (sizeof(ascii_chars) - 1);
-    printf("%c", ascii_chars[index]);
+    return ascii_chars[index];
 }
 
-
+// TODO: Append pixels to buffer and print at once
 void image_ascii(const char *path, int new_width, int colored, int high_res) {
     int width, height, channels;
     int new_height;
@@ -149,7 +153,7 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
                     unsigned char g_bottom = channels > 1 ? image[bottom_pixel_index + 1] : r_bottom; // Green
                     unsigned char b_bottom = channels > 2 ? image[bottom_pixel_index + 2] : r_bottom; // Blue
 
-                    high_res_color_pixel(r_top, g_top, b_top, r_bottom, g_bottom, b_bottom);
+                    printf("%s", high_res_color_pixel(r_top, g_top, b_top, r_bottom, g_bottom, b_bottom));
                 }
                 printf("\n");
             }
@@ -164,7 +168,8 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
                     unsigned char g = channels > 1 ? image[pixel_index + 1] : r; // Green
                     unsigned char b = channels > 2 ? image[pixel_index + 2] : r; // Blue
 
-                    color_pixel(r, g, b);
+                    
+                    printf("%s", color_pixel(r, g, b));
                 }
                 printf("\n");
             }
@@ -174,10 +179,10 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
         for (int y = 0; y < new_height; ++y) {
             for (int x = 0; x < new_width; ++x) {
                 // ASCII
-                int pixel_index = (y * width / new_height) * width + (x * width / new_width);
+                int pixel_index = (y * height / new_height) * width + (x * width / new_width);
                 int pixel_value = image[pixel_index * channels]; // Assuming grayscale or RGB
                 
-                map_pixel(pixel_value);
+                printf("%c", map_pixel(pixel_value));
             }
             printf("\n");
         }
