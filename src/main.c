@@ -164,6 +164,11 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
     float aspect_ratio = (float) height / width;
     new_height = (int) (new_width * aspect_ratio * 0.55);
 
+    char* output_buffer = malloc(new_width * new_height * 50 * sizeof(char));
+    output_buffer[0] = '\0';
+    char temp_buffer[50];
+
+
     if (colored) {
         if(high_res) {
 
@@ -184,9 +189,10 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
                     unsigned char g_bottom = channels > 1 ? image[bottom_pixel_index + 1] : r_bottom; // Green
                     unsigned char b_bottom = channels > 2 ? image[bottom_pixel_index + 2] : r_bottom; // Blue
 
-                    printf("%s", high_res_color_pixel(r_top, g_top, b_top, r_bottom, g_bottom, b_bottom));
+                    snprintf(temp_buffer, sizeof(temp_buffer), "%s", high_res_color_pixel(r_top, g_top, b_top, r_bottom, g_bottom, b_bottom));
+                    strcat(output_buffer, temp_buffer);
                 }
-                printf("\n");
+                strcat(output_buffer, "\n");
             }
 
         } else {
@@ -200,9 +206,10 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
                     unsigned char b = channels > 2 ? image[pixel_index + 2] : r; // Blue
 
                     
-                    printf("%s", color_pixel(r, g, b));
+                    snprintf(temp_buffer, sizeof(temp_buffer), "%s", color_pixel(r, g, b));
+                    strcat(output_buffer, temp_buffer);
                 }
-                printf("\n");
+                strcat(output_buffer, "\n");
             }
         }
         
@@ -213,11 +220,15 @@ void image_ascii(const char *path, int new_width, int colored, int high_res) {
                 int pixel_index = (y * height / new_height) * width + (x * width / new_width);
                 int pixel_value = image[pixel_index * channels]; // Assuming grayscale or RGB
                 
-                printf("%c", map_pixel(pixel_value));
+                snprintf(temp_buffer, sizeof(temp_buffer), "%c", map_pixel(pixel_value));
+                strcat(output_buffer, temp_buffer);
             }
-            printf("\n");
+            strcat(output_buffer, "\n");
         }
     }
+
+    printf("%s", output_buffer);
+
     stbi_image_free(image);
 }
 
