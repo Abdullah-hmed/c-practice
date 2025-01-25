@@ -42,7 +42,7 @@ To run the program, use the following command:
 ```
 Replace `input_image.jpg` with the path to the image file you want to convert, and `80` with the desired output width.
 
-***Arguments**
+**Arguments**
 
 * `-h`: Display help message
 * `-v`: Display version information
