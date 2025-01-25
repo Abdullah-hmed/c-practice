@@ -24,7 +24,7 @@ This is a C program that converts an image into ASCII and unicode art using ANSI
 * Error handling for invalid image files and memory allocation
 
 **Usage**
------
+------------
 
 ### Compiling the Program
 
@@ -43,6 +43,7 @@ To run the program, use the following command:
 Replace `input_image.jpg` with the path to the image file you want to convert, and `80` with the desired output width.
 
 **Arguments**
+------------
 
 * `-h`: Display help message
 * `-v`: Display version information
