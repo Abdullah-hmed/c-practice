@@ -7,6 +7,10 @@
 #include <dirent.h>
 #include <sys/stat.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 // Function prototypes
 void no_args(const char *program_name);
 void print_help(const char *program_name);
@@ -22,6 +26,7 @@ int is_directory(const char *path);
 int file_exists(const char *path);
 int directory_exists(const char *path);
 void image_ascii(const char *path, int new_width, int colored, int high_res);
+void enable_ansi_support();
 
 
 // Main function
@@ -33,6 +38,7 @@ int main(int argc, char *argv[]) {
     int high_res = 0;
     int opt;
 
+    enable_ansi_support();
 
     if (argc < 2) {
         no_args(argv[0]);
@@ -117,6 +123,31 @@ char map_pixel(int pixel_value) {
     int index = pixel_value / 32 % (sizeof(ascii_chars) - 1);
     return ascii_chars[index];
 }
+
+void enable_ansi_support() {
+#ifdef _WIN32
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == INVALID_HANDLE_VALUE) {
+        fprintf(stderr, "Error getting handle to stdout.\n");
+        return;
+    }
+
+    // Enable virtual terminal processing
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hOut, &dwMode)) {
+        fprintf(stderr, "Error getting console mode.\n");
+        return;
+    }
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    if (!SetConsoleMode(hOut, dwMode)) {
+        fprintf(stderr, "Error setting console mode.\n");
+    }
+
+    // Set console output code page to UTF-8
+    SetConsoleOutputCP(65001);
+#endif
+}
+
 
 // TODO: Append pixels to buffer and print at once
 void image_ascii(const char *path, int new_width, int colored, int high_res) {
