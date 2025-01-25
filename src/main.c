@@ -243,8 +243,12 @@ void no_args(const char *program_name) {
 void print_help(const char *program_name) {
     printf("Usage: %s [options]\n", program_name);
     printf("Options:\n");
-    printf("  --help       Show this help message\n");
-    printf("  --version    Show version information\n");
+    printf("  --h   Show this help message\n");
+    printf("  --v   Show version information\n");
+    printf("  --w   Set the width of the output (default: 80)\n");
+    printf("  --d   Set the directory to render media from\n");
+    printf("  --r   Enable high resolution mode\n");
+    printf("  --c   Enable colored mode\n");
 }
 
 void print_version() {
@@ -253,7 +257,7 @@ void print_version() {
 
 void handle_unknown(const char *arg) {
     printf("Unknown argument: %s\n", arg);
-    printf("Use '--help' for usage information.\n");
+    printf("Use '-h' for usage information.\n");
 }
 
 void handle_directory(const char *path, int new_width, int colored, int high_res) {

@@ -5,9 +5,10 @@
 1. [Overview](#overview)
 2. [Features](#features)
 3. [Usage](#usage)
-4. [Dependencies](#dependencies)
-5. [Notes](#notes)
-6. [License](#license)
+4. [Arguments](#arguments)
+5. [Dependencies](#dependencies)
+6. [Notes](#notes)
+7. [License](#license)
 
 **Overview**
 ------------
@@ -40,6 +41,22 @@ To run the program, use the following command:
 ./termview -d input_image.jpg -w 80
 ```
 Replace `input_image.jpg` with the path to the image file you want to convert, and `80` with the desired output width.
+
+***Arguments**
+
+* `-h`: Display help message
+* `-v`: Display version information
+* `-d`: Path to the input image file
+* `-w`: Output width
+* `-c`: Colored output
+* `-r`: High resolution output
+
+#### Examples:
+```bash
+./termview -d input_image.jpg -w 80
+./termview -d input_image.jpg -w 80 -c
+./termview -d input_image.jpg -w 80 -r
+```
 
 **Dependencies**
 ------------
